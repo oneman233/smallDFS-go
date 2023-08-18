@@ -61,6 +61,8 @@ func (ns *NameServer) Run() {
 			ns.read(params[1])
 		case "tree":
 			ns.tree()
+		case "help":
+			ns.help()
 		default:
 			fmt.Println("wrong command")
 		}
@@ -108,4 +110,10 @@ func (ns *NameServer) tree() {
 // Add 注册新 DataServer
 func (ns *NameServer) Add(remoteAddr string) {
 	ns.consistentHash.Add(remoteAddr)
+}
+
+func (ns *NameServer) help() {
+	fmt.Println("upload file: put <local file name> <remote path>")
+	fmt.Println("check file tree: tree")
+	fmt.Println("close server: exit")
 }
