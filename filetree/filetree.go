@@ -62,14 +62,6 @@ func (t *FileTree) Insert(path string, isFile bool) error {
 	return nil
 }
 
-// List 输出文件树某个节点的所有子节点
-func List(node *TreeNode) {
-	for _, son := range node.sons {
-		fmt.Printf("%s ", son.value)
-	}
-	fmt.Println()
-}
-
 // Tree 输出文件树某个节点的所有子树
 func Tree(node *TreeNode, counter int) {
 	for i := 0; i < counter; i++ {

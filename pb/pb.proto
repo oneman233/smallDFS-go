@@ -1,0 +1,13 @@
+syntax="proto3";
+
+package pb;
+option go_package="/pb";
+
+message UploadFileRequest {
+  string file = 1;
+  string path = 2;
+}
+
+message UploadFileResponse {
+  string message = 1;
+}
