@@ -90,7 +90,8 @@ func (ns *NameServer) put(localPath string, remotePath string) error {
 		// 获取实际存储节点地址
 		nodeAddr := ns.consistentHash.Get(replicaName)
 		// 调用网络通信代理上传文件
-		ns.proxy.UploadFile(localFile, replicaName, nodeAddr)
+		msg := ns.proxy.UploadFile(localFile, replicaName, nodeAddr)
+		fmt.Println(msg)
 	}
 
 	return nil

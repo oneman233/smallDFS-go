@@ -13,8 +13,8 @@ type NameProxy struct {
 	downloadPath string
 }
 
-// UploadFile 向 addr 发送 byte 数组形式的文件 file，存储路径为 path
-func (np *NameProxy) UploadFile(file []byte, path string, addr string) {
+// UploadFile 向 addr 发送 byte 数组形式的文件 file，存储路径为 path，返回上传结果
+func (np *NameProxy) UploadFile(file []byte, path string, addr string) string {
 	pbReq := &pb.UploadFileRequest{
 		File: string(file),
 		Path: path,
@@ -34,6 +34,7 @@ func (np *NameProxy) UploadFile(file []byte, path string, addr string) {
 	body, _ := io.ReadAll(httpRes.Body)
 	pbRes := &pb.UploadFileResponse{}
 	_ = proto.Unmarshal(body, pbRes)
+	return pbRes.Message
 }
 
 // DownloadFile 从 addr 下载路径为 path 的文件，返回值是 byte 数组形式

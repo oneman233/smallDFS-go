@@ -16,7 +16,8 @@ func runDataServer() {
 	ds.Run()
 }
 
+// put a.txt b/a.txt
 func main() {
-	runDataServer()
-	//runNameserver()
+	//runDataServer()
+	runNameserver()
 }

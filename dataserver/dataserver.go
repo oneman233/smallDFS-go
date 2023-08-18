@@ -64,6 +64,10 @@ func (ds *DataServer) uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	createFile(path, []byte(file))
+
+	pbRes := &pb.UploadFileResponse{Message: "success"}
+	httpRes, _ := proto.Marshal(pbRes)
+	_, _ = w.Write(httpRes)
 }
 
 func getPath(pathAndFilename string) string {
