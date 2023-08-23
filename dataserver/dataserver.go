@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"smallDFS/constants"
 	"smallDFS/pb"
 	"strings"
 )
@@ -30,7 +31,7 @@ func (ds *DataServer) log(format string, v ...interface{}) {
 func (ds *DataServer) Run() {
 	ds.log("run")
 	// 创建并更改工作目录
-	_ = os.Mkdir(ds.folderName, 0777)
+	_ = os.Mkdir(ds.folderName, constants.DefaultFileMode)
 	_ = os.Chdir(ds.folderName)
 	// 设置 http handler
 	http.HandleFunc("/upload", ds.uploadHandler)
@@ -63,7 +64,7 @@ func (ds *DataServer) uploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	// 如果是形如 a/b.txt 这样的路径，则需要新建路径
 	if strings.Contains(path, "/") {
-		err := os.MkdirAll(getPath(path), 0777)
+		err := os.MkdirAll(getPath(path), constants.DefaultFileMode)
 		if err != nil {
 			panic(err)
 		}

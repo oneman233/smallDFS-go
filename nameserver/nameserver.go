@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"smallDFS/consistenthash"
+	"smallDFS/constants"
 	"smallDFS/filetree"
 	"strconv"
 	"strings"
@@ -128,7 +129,7 @@ func (ns *NameServer) read(remotePath string) error {
 		// 将文件内容写入当前路径，文件名不加 "-0"
 		folders := strings.Split(remotePath, "/")
 		fileName := folders[len(folders)-1]
-		err := os.WriteFile(fileName, file, 0777)
+		err := os.WriteFile(fileName, file, constants.DefaultFileMode)
 		if err != nil {
 			return err
 		}
