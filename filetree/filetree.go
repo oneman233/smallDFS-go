@@ -93,8 +93,8 @@ func (t *FileTree) Dump(jsonName string) {
 	_, _ = file.Write(j)
 }
 
-// ReadDump 读取本地 json 文件并转换为 FileTree
-func ReadDump(jsonName string) (*FileTree, error) {
+// UnDump 读取本地 json 文件并转换为 FileTree
+func UnDump(jsonName string) (*FileTree, error) {
 	// 打开 json 文件
 	file, err := os.Open(jsonName)
 	if err != nil {

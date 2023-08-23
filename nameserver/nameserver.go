@@ -55,7 +55,11 @@ func (ns *NameServer) Run() {
 
 		switch params[0] {
 		case "quit":
-			os.Exit(0)
+			func() {
+				// 在退出前自动 dump 文件树
+				ns.dump()
+				os.Exit(0)
+			}()
 		case "put":
 			_ = ns.put(params[1], params[2])
 		case "read":
@@ -64,6 +68,10 @@ func (ns *NameServer) Run() {
 			ns.tree()
 		case "help":
 			ns.help()
+		case "dump":
+			ns.dump()
+		case "undump":
+			_ = ns.unDump()
 		default:
 			fmt.Println("wrong command")
 		}
@@ -142,6 +150,19 @@ func (ns *NameServer) tree() {
 	filetree.Tree(ns.fileTree.Root, 1)
 }
 
+func (ns *NameServer) dump() {
+	ns.fileTree.Dump(constants.DefaultJSONName)
+}
+
+func (ns *NameServer) unDump() error {
+	t, err := filetree.UnDump(constants.DefaultJSONName)
+	if err != nil {
+		return err
+	}
+	ns.fileTree = t
+	return nil
+}
+
 // Add 注册新 DataServer
 func (ns *NameServer) Add(remoteAddr string) {
 	ns.consistentHash.Add(remoteAddr)
@@ -152,5 +173,6 @@ func (ns *NameServer) help() {
 	fmt.Println("upload file: put <local file name> <remote path>")
 	fmt.Println("download file: read <remote path>")
 	fmt.Println("check file tree: tree")
+	fmt.Println("dump file tree: dump")
 	fmt.Println("close server: exit")
 }
