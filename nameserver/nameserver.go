@@ -26,8 +26,8 @@ func New(fileReplicas int, fakeNodes int) *NameServer {
 		fileReplicas:   fileReplicas,
 		stdinReader:    bufio.NewReader(os.Stdin),
 		proxy: &NameProxy{
-			uploadPath:   "/upload",
-			downloadPath: "/download",
+			uploadPath:   constants.DefaultUploadPath,
+			downloadPath: constants.DefaultDownloadPath,
 		},
 	}
 }

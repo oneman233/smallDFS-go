@@ -34,8 +34,8 @@ func (ds *DataServer) Run() {
 	_ = os.Mkdir(ds.folderName, constants.DefaultFileMode)
 	_ = os.Chdir(ds.folderName)
 	// 设置 http handler
-	http.HandleFunc("/upload", ds.uploadHandler)
-	http.HandleFunc("/download", ds.downloadHandler)
+	http.HandleFunc(constants.DefaultUploadPath, ds.uploadHandler)
+	http.HandleFunc(constants.DefaultDownloadPath, ds.downloadHandler)
 	ds.log("listening")
 	// 监听端口
 	log.Fatal(http.ListenAndServe(":"+ds.port, nil))
