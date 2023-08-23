@@ -32,6 +32,7 @@ func New(fileReplicas int, fakeNodes int) *NameServer {
 	}
 }
 
+// 转换用户输入的命令为参数列表
 func (ns *NameServer) parseCmd() []string {
 	fmt.Print("smallDFS> ")
 	// 从标准输入流读取一整行
@@ -44,6 +45,7 @@ func (ns *NameServer) parseCmd() []string {
 	return strings.Split(line, " ")
 }
 
+// Run 启动 NameServer
 func (ns *NameServer) Run() {
 	for {
 		params := ns.parseCmd()
@@ -150,10 +152,12 @@ func (ns *NameServer) tree() {
 	filetree.Tree(ns.fileTree.Root, 1)
 }
 
+// 序列化文件树
 func (ns *NameServer) dump() {
 	ns.fileTree.Dump(constants.DefaultJSONName)
 }
 
+// 反序列化文件树并赋值给 NameServer
 func (ns *NameServer) unDump() error {
 	t, err := filetree.UnDump(constants.DefaultJSONName)
 	if err != nil {
@@ -174,5 +178,6 @@ func (ns *NameServer) help() {
 	fmt.Println("download file: read <remote path>")
 	fmt.Println("check file tree: tree")
 	fmt.Println("dump file tree: dump")
+	fmt.Println("undump file tree: undump")
 	fmt.Println("close server: exit")
 }
