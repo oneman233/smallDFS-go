@@ -13,6 +13,9 @@
 2. 在 main 函数中启动 dataserver
 3. 在 nameserver 中执行命令 put a.txt b/a.txt
 4. 项目目录下会新建目录 ds-1/b，同时在该目录下生成 a.txt 的三份拷贝
+5. 在 nameserver 中执行命令 read b/a.txt 可以下载 a.txt 到本地
+6. help 命令可以展示各个命令的使用方法
+7. tree 命令可以用于展示文件树结构
 
 # 项目结构
 ```text
