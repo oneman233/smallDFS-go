@@ -2,6 +2,7 @@ package bloomfilter
 
 import (
 	"crypto/sha256"
+	"fmt"
 	"strconv"
 )
 
@@ -32,7 +33,9 @@ func (b *Bloom) Check(key string) bool {
 	for i := 0; i < b.hashCounter; i++ {
 		hashBytes := sha256.Sum256([]byte(key + strconv.Itoa(i)))
 		hashString := string(hashBytes[:])
-		if b.filter[hashString] == false { // 只要有一个哈希值不存在，就说明该元素不存在
+		// 只要有一个哈希值不存在，就说明该元素不存在
+		if b.filter[hashString] == false {
+			fmt.Printf("[bloom filter] check %s failed\n", key)
 			return false
 		}
 	}

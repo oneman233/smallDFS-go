@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"smallDFS/bloomfilter"
 	"smallDFS/consistenthash"
 	"smallDFS/constants"
 	"smallDFS/filetree"
@@ -17,9 +18,11 @@ type NameServer struct {
 	fileReplicas   int                 // 上传的文件创建几份副本
 	stdinReader    *bufio.Reader       // 从 stdin 中读取命令的 reader
 	proxy          *NameProxy          // 网络通信的代理
+	bloom          *bloomfilter.Bloom  // 布隆过滤器
 }
 
-func New(fileReplicas int, fakeNodes int) *NameServer {
+// New 新建 NameServer，三个参数分别是文件备份数、虚拟节点数、布隆过滤器哈希次数
+func New(fileReplicas int, fakeNodes int, bloomHashCount int) *NameServer {
 	return &NameServer{
 		consistentHash: consistenthash.New(fakeNodes, nil),
 		fileTree:       filetree.New(),
@@ -29,6 +32,7 @@ func New(fileReplicas int, fakeNodes int) *NameServer {
 			uploadPath:   constants.DefaultUploadPath,
 			downloadPath: constants.DefaultDownloadPath,
 		},
+		bloom: bloomfilter.New(bloomHashCount),
 	}
 }
 
@@ -96,6 +100,9 @@ func (ns *NameServer) put(localPath string, remotePath string) error {
 	// 插入远程路径
 	_ = ns.fileTree.Insert(remotePath, true)
 
+	// 插入布隆过滤器
+	ns.bloom.Insert(remotePath)
+
 	// 创建文件副本
 	for i := 0; i < ns.fileReplicas; i++ {
 		// 拼接文件副本名
@@ -111,6 +118,11 @@ func (ns *NameServer) put(localPath string, remotePath string) error {
 }
 
 func (ns *NameServer) read(remotePath string) error {
+	// 利用布隆过滤器检查远程路径是否存在
+	if !ns.bloom.Check(remotePath) {
+		return fmt.Errorf("remote path %s not existed", remotePath)
+	}
+
 	// 检查远程路径是否存在
 	isPath, isFile := ns.fileTree.Find(remotePath)
 	if !isPath || !isFile {
