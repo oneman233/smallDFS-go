@@ -58,7 +58,7 @@ func (ns *NameServer) Run() {
 		case "put":
 			_ = ns.put(params[1], params[2])
 		case "read":
-			ns.read(params[1])
+			_ = ns.read(params[1])
 		case "tree":
 			ns.tree()
 		case "help":
@@ -99,8 +99,42 @@ func (ns *NameServer) put(localPath string, remotePath string) error {
 	return nil
 }
 
-func (ns *NameServer) read(remotePath string) {
+func (ns *NameServer) read(remotePath string) error {
+	// 检查远程路径是否存在
+	isPath, isFile := ns.fileTree.Find(remotePath)
+	if !isPath || !isFile {
+		return fmt.Errorf("remote path %s not existed", remotePath)
+	}
 
+	success := false
+	var file []byte
+	var err error
+
+	// 尝试下载可用副本，下载成功则退出循环
+	for i := 0; i < ns.fileReplicas; i++ {
+		replicaName := remotePath + "-" + strconv.Itoa(i)
+		nodeAddr := ns.consistentHash.Get(replicaName)
+		// 下载的文件名要加上 "-0"
+		file, err = ns.proxy.DownloadFile(replicaName, nodeAddr)
+		if err == nil {
+			success = true
+			break
+		}
+	}
+
+	if !success {
+		return fmt.Errorf("no avaliable copys of file %s", remotePath)
+	} else {
+		// 将文件内容写入当前路径，文件名不加 "-0"
+		folders := strings.Split(remotePath, "/")
+		fileName := folders[len(folders)-1]
+		err := os.WriteFile(fileName, file, 0777)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (ns *NameServer) tree() {
@@ -112,8 +146,10 @@ func (ns *NameServer) Add(remoteAddr string) {
 	ns.consistentHash.Add(remoteAddr)
 }
 
+// help 命令输出使用指南
 func (ns *NameServer) help() {
 	fmt.Println("upload file: put <local file name> <remote path>")
+	fmt.Println("download file: read <remote path>")
 	fmt.Println("check file tree: tree")
 	fmt.Println("close server: exit")
 }

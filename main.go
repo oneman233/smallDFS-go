@@ -17,6 +17,7 @@ func runDataServer() {
 }
 
 // put a.txt b/a.txt
+// read b/a.txt
 func main() {
 	//runDataServer()
 	runNameserver()
