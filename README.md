@@ -23,13 +23,18 @@
 ```text
 .
 ├── README.md
+├── bloomfilter
+│        └── bloomfilter.go
 ├── consistenthash
 │        ├── consistenthash.go
 │        └── consistenthash_test.go
+├── constants
+│        └── constants.go
 ├── dataserver
 │        └── dataserver.go
 ├── filetree
-│        └── filetree.go
+│        ├── filetree.go
+│        └── filetree_test.go
 ├── go.mod
 ├── go.sum
 ├── main.go
@@ -37,7 +42,8 @@
 │        ├── nameproxy.go
 │        └── nameserver.go
 └── pb
-    ├── pb.pb.go
+    ├── complie.sh
+    ├── pb.go
     └── pb.proto
 ```
 
