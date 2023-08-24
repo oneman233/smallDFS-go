@@ -116,3 +116,22 @@ func UnDump(jsonName string) (*FileTree, error) {
 
 	return t, nil
 }
+
+// GetAllPath 获取文件树指定节点包含的全部路径
+func GetAllPath(node *TreeNode, currentPath string) []string {
+	// 如果不为根节点则拼接当前节点的路径
+	if node.Value != "/" {
+		currentPath += "/" + node.Value
+	}
+	// 生成结果数组
+	var ans []string
+	// 当前路径不为空则将其添加进结果数组
+	if currentPath != "" {
+		ans = append(ans, currentPath)
+	}
+	// 添加每个子节点对应的路径
+	for _, son := range node.Sons {
+		ans = append(ans, GetAllPath(son, currentPath)...)
+	}
+	return ans
+}

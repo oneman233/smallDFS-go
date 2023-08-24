@@ -160,6 +160,7 @@ func (ns *NameServer) read(remotePath string) error {
 	return nil
 }
 
+// 打印整个文件树
 func (ns *NameServer) tree() {
 	filetree.Tree(ns.fileTree.Root, 1)
 }
@@ -176,6 +177,14 @@ func (ns *NameServer) unDump() error {
 		return err
 	}
 	ns.fileTree = t
+	// 清空布隆过滤器
+	ns.bloom.Purge()
+	// 获取当前文件树的全部路径
+	paths := filetree.GetAllPath(ns.fileTree.Root, "")
+	// 将全部路径插入布隆过滤器
+	for _, path := range paths {
+		ns.bloom.Insert(path)
+	}
 	return nil
 }
 
