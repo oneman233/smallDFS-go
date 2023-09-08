@@ -22,29 +22,42 @@
 # 项目结构
 ```text
 .
-├── README.md
-├── bloomfilter
-│        └── bloomfilter.go
-├── consistenthash
-│        ├── consistenthash.go
-│        └── consistenthash_test.go
-├── constants
-│        └── constants.go
-├── dataserver
-│        └── dataserver.go
-├── filetree
-│        ├── filetree.go
-│        └── filetree_test.go
-├── go.mod
-├── go.sum
-├── main.go
-├── nameserver
-│        ├── nameproxy.go
-│        └── nameserver.go
-└── pb
-    ├── complie.sh
-    ├── pb.go
-    └── pb.proto
+│  go.mod
+│  go.sum
+│  main.go
+│  README.md
+│
+├─bloomfilter
+│      bloomfilter.go
+│
+├─consistenthash
+│      consistenthash.go
+│      consistenthash_test.go
+│
+├─constants
+│      constants.go
+│
+├─dataserver
+│      dataserver.go
+│
+├─filetree
+│      filetree.go
+│      filetree_test.go
+│
+├─nameserver
+│      nameproxy.go
+│      nameserver.go
+│
+├─pb
+│      complie.sh
+│      pb.go
+│      pb.proto
+│
+└─skiplist
+        node.go
+        skiplist.go
+        skiplist_test.go
+
 ```
 
 # todos
@@ -57,7 +70,6 @@
 - [x] 接入布隆过滤器
 - [x] help 命令实现
 - [x] 布隆过滤器在树反序列化后重置
-- [ ] 跳表实现
-- [ ] 接入跳表
+- [x] 跳表实现及测试
 - [ ] 文件拆分为 chunk
 - [ ] 支持 delete
