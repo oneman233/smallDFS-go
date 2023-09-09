@@ -66,6 +66,31 @@ func (t *FileTree) Insert(path string, isFile bool) error {
 	return nil
 }
 
+// Delete 删除文件树中的指定文件
+func (t *FileTree) Delete(path string) error {
+	// 如果路径不是文件，那么返回错误
+	if _, isFile := t.Find(path); !isFile {
+		return fmt.Errorf("path %s is not a file", path)
+	}
+
+	folders := strings.Split(path, "/")
+	node := t.Root
+	// 最后一个文件节点的下标
+	lastFolderIdx := len(folders) - 1
+
+	for i, folder := range folders {
+		// 找到文件节点的父目录节点
+		if i == lastFolderIdx {
+			break
+		}
+		node = node.Sons[folder]
+	}
+
+	// 删除父目录节点中的文件指针
+	delete(node.Sons, folders[lastFolderIdx])
+	return nil
+}
+
 // Tree 输出文件树某个节点的所有子树
 func Tree(node *TreeNode, counter int) {
 	for i := 0; i < counter; i++ {

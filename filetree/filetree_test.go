@@ -33,3 +33,17 @@ func TestGetAllPath(t *testing.T) {
 		fmt.Println(path)
 	}
 }
+
+func TestFileTree_Delete(t *testing.T) {
+	tree := New()
+	_ = tree.Insert("b", false)
+	_ = tree.Insert("c/a.txt", true)
+	_ = tree.Insert("c", false)
+	_ = tree.Insert("d.txt", true)
+	Tree(tree.Root, 1)
+	_ = tree.Delete("c")
+	_ = tree.Delete("c/d.txt")
+	_ = tree.Delete("d.txt")
+	_ = tree.Delete("c/a.txt")
+	Tree(tree.Root, 1)
+}
